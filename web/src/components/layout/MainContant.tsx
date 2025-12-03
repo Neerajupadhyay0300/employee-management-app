@@ -117,22 +117,14 @@ export default function MainContent() {
                 <div className="flex items-center bg-neutral-100 rounded-lg p-1">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                      viewMode === 'grid'
-                        ? 'bg-primary-600 text-white shadow-sm'
-                        : 'text-neutral-900 hover:text-primary-600 hover:bg-primary-50'
-                    }`}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors bg-primary-600 text-white shadow-sm`}
                   >
                     <LayoutGrid className="h-4 w-4" />
                     <span>Grid</span>
                   </button>
                   <button
                     onClick={() => setViewMode('tile')}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                      viewMode === 'tile'
-                        ? 'bg-primary-600 text-white shadow-sm'
-                        : 'text-neutral-900 hover:text-primary-600 hover:bg-primary-50'
-                    }`}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors text-neutral-900 hover:text-primary-600 hover:bg-primary-50`}
                   >
                     <Grid3X3 className="h-4 w-4" />
                     <span>Tile</span>
@@ -293,22 +285,14 @@ export default function MainContent() {
             <div className="flex items-center bg-neutral-100 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                  viewMode === 'grid'
-                    ? 'bg-primary-600 text-white shadow-sm'
-                    : 'text-neutral-900 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors text-neutral-900 hover:text-primary-600 hover:bg-primary-50`}
               >
                 <LayoutGrid className="h-4 w-4" />
                 <span>Grid</span>
               </button>
               <button
                 onClick={() => setViewMode('tile')}
-                className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                  viewMode === 'tile'
-                    ? 'bg-primary-600 text-white shadow-sm'
-                    : 'text-neutral-900 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors bg-primary-600 text-white shadow-sm`}
               >
                 <Grid3X3 className="h-4 w-4" />
                 <span>Tile</span>

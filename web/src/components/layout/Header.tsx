@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Menu, X, Bell } from 'lucide-react';
 
 interface HeaderProps {
@@ -7,24 +6,6 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuClick, isOpen = false }: HeaderProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // 水平导航项 - 范例风格
-  const horizontalMenuItems = [
-    { label: 'Overview', href: '/', active: true },
-    { label: 'Employees', href: '/employees', count: 156 },
-    { label: 'Departments', href: '/departments', count: 12 },
-    { label: 'Analytics', href: '/analytics' },
-    { label: 'Reports', href: '/reports', count: 8 },
-  ];
-
-  // 仿照范例的 "Add" 下拉菜单
-  const addDropdownItems = [
-    { label: 'New Employee', type: 'employee' },
-    { label: 'New Department', type: 'department' },
-    { label: 'Quick Report', type: 'report' },
-    { label: 'Announcement', type: 'announcement' },
-  ];
 
   return (
     <header className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-neutral-200 shadow-sm">

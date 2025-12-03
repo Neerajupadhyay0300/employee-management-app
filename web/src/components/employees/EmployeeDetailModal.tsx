@@ -1,6 +1,5 @@
 // src/components/employees/EmployeeDetailModal.tsx
-import React from 'react';
-import { X, Mail, Phone, Building, Calendar, User, MapPin, FileText } from 'lucide-react';
+import { X, Mail, Phone, Building, Calendar, User } from 'lucide-react';
 
 interface EmployeeDetailModalProps {
   isOpen: boolean;

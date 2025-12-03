@@ -1,5 +1,5 @@
 // src/components/layout/AppLayout.tsx
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import MainContent from './MainContant'
@@ -21,7 +21,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
   </div>
   <div className="row-start-2 col-start-2 overflow-hidden bg-white">
-          <MainContent />
+          {children ?? <MainContent />}
   </div>
 </div>
 
