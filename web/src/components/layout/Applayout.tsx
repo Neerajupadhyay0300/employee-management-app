@@ -1,5 +1,6 @@
 // src/components/layout/AppLayout.tsx
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import MainContent from './MainContant'
@@ -21,7 +22,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
   </div>
   <div className="row-start-2 col-start-2 overflow-hidden bg-white">
-          {children ?? <MainContent />}
+          {children ? children : <Outlet />}
   </div>
 </div>
 

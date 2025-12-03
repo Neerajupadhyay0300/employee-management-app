@@ -1,3 +1,4 @@
+import React from 'react'
 import { BarChart3, Users, TrendingUp, Clock, MoreVertical } from 'lucide-react'
 
 export default function Dashboard() {
