@@ -3,7 +3,10 @@ import { useEffect, useState, useCallback } from 'react'
 type Status = 'unknown' | 'up' | 'down'
 
 export function useBackendHealth() {
-  const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000/graphql'
+  //const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000/graphql'
+  //Temp Solution
+  const apiUrl = "https://meticulous-possibility-production.up.railway.app/graphql"
+  
   const healthUrl = apiUrl.replace(/\/graphql$/, '/health')
 
   const [status, setStatus] = useState<Status>('unknown')

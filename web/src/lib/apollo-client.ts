@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000/graphql'
-
+//const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000/graphql'
+const apiUrl = "https://meticulous-possibility-production.up.railway.app/graphql"
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => console.error(`[GraphQL error]: ${message}`))
