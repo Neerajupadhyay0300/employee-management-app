@@ -79,14 +79,14 @@ const QueryType = new GraphQLObjectType({
         page: { type: GraphQLInt },
         pageSize: { type: GraphQLInt },
       },
-      resolve: (root: any, args: { page?: number; pageSize?: number }) => {
+      resolve: (root: any, args: any) => {
         return root.employees(args);
       },
     },
     employee: {
       type: EmployeeType,
       args: { id: { type: new GraphQLNonNull(GraphQLID) } },
-      resolve: (root: any, args: { id: string }) => {
+      resolve: (root: any, args: any) => {
         return root.employee(args);
       },
     },
@@ -102,7 +102,7 @@ const MutationType = new GraphQLObjectType({
       args: {
         data: { type: new GraphQLNonNull(EmployeeInputType) },
       },
-      resolve: (root: any, args: { data: any }) => {
+      resolve: (root: any, args: any) => {
         return root.addEmployee(args);
       },
     },
@@ -112,7 +112,7 @@ const MutationType = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLID) },
         data: { type: new GraphQLNonNull(EmployeeUpdateInputType) },
       },
-      resolve: (root: any, args: { id: string; data: any }) => {
+      resolve: (root: any, args: any) => {
         return root.updateEmployee(args);
       },
     },
@@ -122,7 +122,7 @@ const MutationType = new GraphQLObjectType({
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: (root: any, args: { email: string; password: string }) => {
+      resolve: (root: any, args: any) => {
         return root.login(args);
       },
     },
