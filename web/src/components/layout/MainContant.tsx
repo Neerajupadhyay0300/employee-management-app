@@ -66,7 +66,7 @@ export default function MainContent() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const resp = await fetch('http://localhost:4000/graphql', {
+          const resp = await fetch('https://meticulous-possibility-production.up.railway.app/graphql', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
