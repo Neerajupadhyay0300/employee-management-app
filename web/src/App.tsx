@@ -3,6 +3,7 @@ import { client } from './lib/apollo-client'
 import AppLayout from './components/layout/Applayout'
 import MainContent from './components/layout/MainContant'
 import ConnectionStatus from './pages/ConnectionStatus'
+import AddEmployee from './pages/AddEmployee'
 import { useBackendHealth } from './hooks/useBackendHealth'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BackendStatus } from './components/BackendStatus'
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<AppLayout />}> 
               <Route index element={<MainContent />} />
               <Route path="employees" element={<MainContent />} />
+              <Route path="employees/new" element={<AddEmployee />} />
               <Route path="connection" element={<ConnectionStatus />} />
             </Route>
           </Routes>

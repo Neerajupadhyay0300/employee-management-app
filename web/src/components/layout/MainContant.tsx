@@ -114,22 +114,23 @@ export default function MainContent() {
                     className="pl-10 pr-3 py-2 w-64 rounded-lg border border-neutral-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-sm"
                   />
                 </div>
-                <div className="flex items-center bg-neutral-100 rounded-lg p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors bg-primary-600 text-white shadow-sm`}
-                  >
-                    <LayoutGrid className="h-4 w-4" />
-                    <span>Grid</span>
-                  </button>
-                  <button
-                    onClick={() => setViewMode('tile')}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors text-neutral-900 hover:text-primary-600 hover:bg-primary-50`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                    <span>Tile</span>
-                  </button>
-                </div>
+              <div className="flex items-center bg-neutral-100 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors bg-primary-600 text-white shadow-sm`}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                  <span>Grid</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('tile')}
+                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-colors text-neutral-900 hover:text-primary-600 hover:bg-primary-50`}
+                >
+                  <Grid3X3 className="h-4 w-4" />
+                  <span>Tile</span>
+                </button>
+                <a href="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-secondary-600 text-white hover:bg-secondary-700">Add Employee</a>
+              </div>
               </div>
             )}
             {employees.length === 0 ? (
