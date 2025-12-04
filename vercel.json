@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "server/api/**/*.ts", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/graphql", "dest": "/server/api/index.ts" },
+    { "src": "/health", "dest": "/server/api/index.ts" }
+  ]
+}
