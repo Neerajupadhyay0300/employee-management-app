@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Grid3X3, LayoutGrid, MoreVertical, User, Mail, Building, Calendar, Search, Edit, Flag, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom'
-import { useComingSoon } from '../../context/comingSoon'
+ 
 import EmployeeDetailModal from '../employees/EmployeeDetailModal';
 
 type Employee = {
@@ -29,7 +29,6 @@ export default function MainContent() {
   const [pageSize, setPageSize] = useState(10);
   const [menuOpenId, setMenuOpenId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const { openModal } = useComingSoon()
 
   const parseDateMs = (v: any) => {
     if (typeof v === 'number' && !isNaN(v)) return v;

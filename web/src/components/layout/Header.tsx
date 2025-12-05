@@ -1,4 +1,4 @@
-import { Menu, X, Bell, ChevronDown } from 'lucide-react';
+import { Menu, X, Bell } from 'lucide-react';
 import { useState } from 'react'
 import { useComingSoon } from '../../context/comingSoon'
 

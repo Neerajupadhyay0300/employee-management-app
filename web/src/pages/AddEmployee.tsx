@@ -1,19 +1,9 @@
-import { gql, useMutation } from '@apollo/client'
+//
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const ADD_EMPLOYEE = gql`
-  mutation AddEmployee($data: EmployeeInput!) {
-    addEmployee(data: $data) {
-      id
-      name
-      email
-      department
-      role
-    }
-  }
-`
+//
 
 type FormState = {
   name: string
@@ -35,8 +25,6 @@ export default function AddEmployee() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [successTimer, setSuccessTimer] = useState<number | null>(null)
-
-  const [addEmployee, { loading }] = useMutation(ADD_EMPLOYEE)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
