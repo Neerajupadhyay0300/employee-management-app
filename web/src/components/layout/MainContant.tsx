@@ -370,7 +370,7 @@ export default function MainContent() {
                 <Grid3X3 className="h-4 w-4" />
                 <span>Tile</span>
               </button>
-              <Link to="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow">
+              <Link to="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow hover:text-white">
                 Add Employee
               </Link>
             </div>
