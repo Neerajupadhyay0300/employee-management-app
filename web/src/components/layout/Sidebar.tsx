@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link, useLocation } from 'react-router-dom'
+import { useComingSoon } from '../../context/comingSoon'
 import { Home, Users, CreditCard, FileText, User as UserIcon, Sparkles } from 'lucide-react'
 
 interface SidebarProps {
@@ -9,6 +11,9 @@ interface SidebarProps {
 export default function Sidebar({ isOpen = true }: SidebarProps) {
   const [openTeams, setOpenTeams] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
+  const { openModal } = useComingSoon()
+  const { pathname } = useLocation()
+  const isAddEmployee = pathname.startsWith('/employees/new')
 
   return (
       <div className={`h-full flex flex-col justify-between border-r border-neutral-200 bg-white ${isOpen ? 'w-64' : 'w-16'} overflow-y-auto shadow-sm`}>
@@ -22,13 +27,22 @@ export default function Sidebar({ isOpen = true }: SidebarProps) {
         <ul className="mt-6 space-y-1">
           {/* General */}
           <li>
-            <a
-              href="#"
-              className={`flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium bg-primary-50 text-primary-700 border border-primary-100`}
+            <Link
+              to="/employees"
+              className={`flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium ${isAddEmployee ? 'bg-white text-neutral-700' : 'bg-primary-50 text-primary-700'} border ${isAddEmployee ? 'border-neutral-200' : 'border-primary-100'} hover:shadow`}
             >
               <Home className="h-5 w-5" />
               {isOpen && <span>General</span>}
-            </a>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/employees/new"
+              className={`flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium ${isAddEmployee ? 'bg-primary-50 text-primary-700 border border-primary-100' : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 border border-transparent'}`}
+            >
+              <Users className="h-5 w-5" />
+              {isOpen && <span>Add Employee</span>}
+            </Link>
           </li>
 
           {/* Teams Dropdown */}
@@ -67,21 +81,21 @@ export default function Sidebar({ isOpen = true }: SidebarProps) {
             {isOpen && openTeams && (
               <ul className={`mt-2 space-y-1 ${isOpen ? 'px-4' : 'px-2'}`}>
                 <li>
-                  <a
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                  <button
+                    onClick={openModal}
+                    className="w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                   >
                     Banned Users
-                  </a>
+                  </button>
                 </li>
 
                 <li>
-                  <a
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                  <button
+                    onClick={openModal}
+                    className="w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                   >
                     Calendar
-                  </a>
+                  </button>
                 </li>
               </ul>
             )}
@@ -89,24 +103,24 @@ export default function Sidebar({ isOpen = true }: SidebarProps) {
 
           {/* Billing */}
           <li>
-            <a
-              href="#"
-              className={`flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900`}
+            <button
+              onClick={openModal}
+              className={`w-full flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900`}
             >
               <CreditCard className="h-5 w-5" />
               {isOpen && <span>Billing</span>}
-            </a>
+            </button>
           </li>
 
           {/* Invoices */}
           <li>
-            <a
-              href="#"
-              className={`flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900`}
+            <button
+              onClick={openModal}
+              className={`w-full flex items-center ${isOpen ? 'justify-start px-4 space-x-3' : 'justify-center px-0'} rounded-lg py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900`}
             >
               <FileText className="h-5 w-5" />
               {isOpen && <span>Invoices</span>}
-            </a>
+            </button>
           </li>
 
           {/* Account Dropdown */}
@@ -145,28 +159,28 @@ export default function Sidebar({ isOpen = true }: SidebarProps) {
             {isOpen && openAccount && (
               <ul className={`mt-2 space-y-1 ${isOpen ? 'px-4' : 'px-2'}`}>
                 <li>
-                  <a
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                  <button
+                    onClick={openModal}
+                    className="w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                   >
                     Details
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                  <button
+                    onClick={openModal}
+                    className="w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                   >
                     Security
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                  <button
+                    onClick={openModal}
+                    className="w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                   >
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             )}

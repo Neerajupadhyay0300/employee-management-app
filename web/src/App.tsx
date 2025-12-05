@@ -7,6 +7,8 @@ import AddEmployee from './pages/AddEmployee'
 import { useBackendHealth } from './hooks/useBackendHealth'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BackendStatus } from './components/BackendStatus'
+import ComingSoon from './components/ComingSoon'
+import { ComingSoonProvider } from './context/comingSoon'
 import type { ReactNode } from 'react'
 
 function App() {
@@ -18,19 +20,22 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <BrowserRouter>
-        <BackendGuard>
-          <Routes>
-            <Route path="/" element={<AppLayout />}> 
-              <Route index element={<MainContent />} />
-              <Route path="employees" element={<MainContent />} />
-              <Route path="employees/new" element={<AddEmployee />} />
-              <Route path="connection" element={<ConnectionStatus />} />
-            </Route>
-          </Routes>
-        </BackendGuard>
-        <BackendStatus />
-      </BrowserRouter>
+      <ComingSoonProvider>
+        <BrowserRouter>
+          <BackendGuard>
+            <Routes>
+              <Route path="/" element={<AppLayout />}> 
+                <Route index element={<MainContent />} />
+                <Route path="employees" element={<MainContent />} />
+                <Route path="employees/new" element={<AddEmployee />} />
+                <Route path="connection" element={<ConnectionStatus />} />
+              </Route>
+            </Routes>
+          </BackendGuard>
+          <BackendStatus />
+          <ComingSoon />
+        </BrowserRouter>
+      </ComingSoonProvider>
     </ApolloProvider>
   )
 }

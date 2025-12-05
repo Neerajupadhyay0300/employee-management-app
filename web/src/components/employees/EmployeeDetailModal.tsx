@@ -19,6 +19,29 @@ interface EmployeeDetailModalProps {
 export default function EmployeeDetailModal({ isOpen, onClose, employee }: EmployeeDetailModalProps) {
   if (!isOpen) return null;
 
+  const parseDateMs = (v: string) => {
+    if (/^\d+$/.test(v)) {
+      const ms = Number(v);
+      if (!isNaN(ms)) return ms;
+    }
+    const d1 = new Date(v);
+    if (!isNaN(d1.getTime())) return d1.getTime();
+    const m = v.match(/^(\d{2})[-\/]?(\d{2})[-\/]?(\d{4})$/);
+    if (m) {
+      const iso = `${m[3]}-${m[2]}-${m[1]}`;
+      const d2 = new Date(iso);
+      if (!isNaN(d2.getTime())) return d2.getTime();
+    }
+    return 0;
+  };
+
+  const formatDate = (v: string) => {
+    const ms = parseDateMs(v);
+    if (ms === 0) return v || '—';
+    const d = new Date(ms);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* 背景遮罩 */}
@@ -51,7 +74,7 @@ export default function EmployeeDetailModal({ isOpen, onClose, employee }: Emplo
                     <User className="h-16 w-16 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{employee.name}</h3>
-                  <p className="text-blue-600 font-medium mb-4">{employee.role}</p>
+                  <p className="text-blue-600 font-medium mb-4">{employee.department} Department</p>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     employee.status === 'active' 
                       ? 'bg-green-100 text-green-800'
@@ -65,9 +88,14 @@ export default function EmployeeDetailModal({ isOpen, onClose, employee }: Emplo
 
                 {/* 快速操作 */}
                 <div className="mt-6 space-y-3">
-                  <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    Edit Profile
-                  </button>
+                  <div className="relative group">
+                    <button disabled title="You don't have permission to perform this action" className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium opacity-50 cursor-not-allowed">
+                      Edit Profile
+                    </button>
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-neutral-900 text-white text-xs px-2 py-1 rounded shadow">
+                      You don't have permission to perform this action
+                    </div>
+                  </div>
                   <button className="w-full py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
                     Send Message
                   </button>
@@ -95,11 +123,7 @@ export default function EmployeeDetailModal({ isOpen, onClose, employee }: Emplo
                         <label className="text-sm text-gray-600">Hire Date</label>
                         <p className="font-medium flex items-center">
                           <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                          {new Date(employee.hireDate).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          })}
+                          {formatDate(employee.hireDate)}
                         </p>
                       </div>
                     </div>
@@ -118,10 +142,10 @@ export default function EmployeeDetailModal({ isOpen, onClose, employee }: Emplo
                           {employee.department}
                         </p>
                       </div>
-                      <div>
+                      {/* <div>
                         <label className="text-sm text-gray-600">Role</label>
                         <p className="font-medium">{employee.role}</p>
-                      </div>
+                      </div> */}
                       <div>
                         <label className="text-sm text-gray-600">Work Status</label>
                         <p className="font-medium">{employee.status === 'remote' ? 'Remote' : 'On-site'}</p>
@@ -161,9 +185,14 @@ export default function EmployeeDetailModal({ isOpen, onClose, employee }: Emplo
                   >
                     Back to Directory
                   </button>
-                  <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    Update Information
-                  </button>
+                  <div className="relative group">
+                    <button disabled title="You don't have permission to perform this action" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium opacity-50 cursor-not-allowed">
+                      Update Information
+                    </button>
+                    <div className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 bg-neutral-900 text-white text-xs px-2 py-1 rounded shadow">
+                      You don't have permission to perform this action
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Grid3X3, LayoutGrid, MoreVertical, User, Mail, Building, Calendar, Search, Edit, Flag, Trash2 } from 'lucide-react';
+import { Grid3X3, LayoutGrid, MoreVertical, User, Mail, Building, Calendar, Search, Edit, Flag, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom'
+import { useComingSoon } from '../../context/comingSoon'
 import EmployeeDetailModal from '../employees/EmployeeDetailModal';
 
 type Employee = {
@@ -26,6 +28,37 @@ export default function MainContent() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [menuOpenId, setMenuOpenId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { openModal } = useComingSoon()
+
+  const parseDateMs = (v: any) => {
+    if (typeof v === 'number' && !isNaN(v)) return v;
+    if (typeof v === 'string' && /^\d+$/.test(v)) {
+      const ms = Number(v);
+      if (!isNaN(ms)) return ms;
+    }
+    const d1 = new Date(v);
+    if (!isNaN(d1.getTime())) return d1.getTime();
+    if (typeof v === 'string') {
+      const m = v.match(/^(\d{2})[-\/]?(\d{2})[-\/]?(\d{4})$/);
+      if (m) {
+        const iso = `${m[3]}-${m[2]}-${m[1]}`;
+        const d2 = new Date(iso);
+        if (!isNaN(d2.getTime())) return d2.getTime();
+      }
+    }
+    return 0;
+  };
+
+  const formatDate = (v: string) => {
+    const ms = parseDateMs(v);
+    if (ms === 0) return v || '—';
+    const d = new Date(ms);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -45,8 +78,8 @@ export default function MainContent() {
       let av: any = a[sortKey];
       let bv: any = b[sortKey];
       if (sortKey === 'hireDate') {
-        av = new Date(a.hireDate).getTime();
-        bv = new Date(b.hireDate).getTime();
+        av = parseDateMs(a.hireDate);
+        bv = parseDateMs(b.hireDate);
       }
       if (typeof av === 'string') {
         av = av.toLowerCase();
@@ -66,7 +99,9 @@ export default function MainContent() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-          const resp = await fetch('https://meticulous-possibility-production.up.railway.app/graphql', {
+        setLoading(true)
+        const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000/graphql'
+        const resp = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -80,6 +115,8 @@ export default function MainContent() {
         setTotal(payload.total);
       } catch (e) {
         console.error('Failed to fetch employees', e);
+      } finally {
+        setLoading(false)
       }
     };
     fetchEmployees();
@@ -97,7 +134,7 @@ export default function MainContent() {
 
   return (
     <main className="flex-1 flex flex-col min-h-0 bg-[#F7F7FF]">
-      <div className="flex-1 min-h-0 overflow-y-scroll overflow-x-hidden p-3 [scrollbar-gutter:stable_both-edges] max-w-full mx-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-3 max-w-full mx-auto">
         {viewMode === 'grid' ? (
           <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
             {employees.length > 0 && (
@@ -129,16 +166,26 @@ export default function MainContent() {
                   <Grid3X3 className="h-4 w-4" />
                   <span>Tile</span>
                 </button>
-                <a href="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-secondary-600 text-white hover:bg-secondary-700">Add Employee</a>
+                <Link to="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow hover:text-white">
+                  Add Employee
+                </Link>
               </div>
               </div>
             )}
-            {employees.length === 0 ? (
+            {loading && (
+              <div className="px-6 py-6">
+                <div className="flex items-center space-x-3">
+                  <div className="h-5 w-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-neutral-600">Fetching data...</span>
+                </div>
+              </div>
+            )}
+            {employees.length === 0 && !loading ? (
               <div className="px-6 py-12 text-center">
                 <h3 className="text-lg font-semibold text-neutral-900">No employees</h3>
                 <p className="mt-1 text-sm text-neutral-600">Add employees to see them here.</p>
               </div>
-            ) : filtered.length === 0 ? (
+            ) : filtered.length === 0 && !loading ? (
               <div className="px-6 py-12 text-center">
                 <h3 className="text-lg font-semibold text-neutral-900">No matches</h3>
                 <p className="mt-1 text-sm text-neutral-600">Try adjusting your search.</p>
@@ -151,7 +198,7 @@ export default function MainContent() {
                   <tr>
                     {[
                       { key: 'name', label: 'Name' },
-                      { key: 'role', label: 'Role' },
+                //      { key: 'role', label: 'Role' },
                       { key: 'department', label: 'Department' },
                       { key: 'email', label: 'Email' },
                       { key: 'phone', label: 'Phone' },
@@ -191,9 +238,9 @@ export default function MainContent() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                         {employee.role}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                         {employee.department}
                       </td>
@@ -204,7 +251,7 @@ export default function MainContent() {
                         {employee.phone}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                        {new Date(employee.hireDate).toLocaleDateString()}
+                        {formatDate(employee.hireDate)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                         {employee.attendance}%
@@ -226,11 +273,27 @@ export default function MainContent() {
                             className="p-1 hover:bg-neutral-100 rounded"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleEmployeeAction('menu', employee.id);
+                              setMenuOpenId(menuOpenId === employee.id ? null : employee.id);
                             }}
                           >
                             <MoreVertical className="h-4 w-4 text-neutral-500" />
                           </button>
+                          {menuOpenId === employee.id && (
+                            <div className="absolute right-0 mt-2 w-36 rounded-md border border-neutral-200 bg-white shadow">
+                              <button className="flex w-full items-center space-x-2 px-3 py-2 text-sm hover:bg-neutral-50" onClick={() => handleEmployeeAction('edit', employee.id)}>
+                                <Edit className="h-4 w-4 text-neutral-600" />
+                                <span>Edit</span>
+                              </button>
+                              <button className="flex w-full items-center space-x-2 px-3 py-2 text-sm hover:bg-neutral-50" onClick={() => handleEmployeeAction('flag', employee.id)}>
+                                <Flag className="h-4 w-4 text-neutral-600" />
+                                <span>Flag</span>
+                              </button>
+                              <button className="flex w-full items-center space-x-2 px-3 py-2 text-sm hover:bg-neutral-50" onClick={() => handleEmployeeAction('delete', employee.id)}>
+                                <Trash2 className="h-4 w-4 text-red-600" />
+                                <span className="text-red-600">Delete</span>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -244,23 +307,25 @@ export default function MainContent() {
                 <select
                   value={pageSize}
                   onChange={(e) => { setPage(1); setPageSize(Number(e.target.value)); }}
-                  className="border border-neutral-300 rounded-md text-sm px-2 py-1"
+                  className="border border-neutral-300 rounded-md text-sm px-2 py-1 shadow-sm hover:shadow"
                 >
                   {[5,10,20,50].map(n => <option key={n} value={n}>{n}/page</option>)}
                 </select>
                 <button
-                  className="px-3 py-1 rounded-md border border-neutral-300 text-sm disabled:opacity-50"
+                  className="px-3 py-1 rounded-md border border-neutral-300 text-sm disabled:opacity-50 hover:shadow"
                   disabled={page === 1}
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  title="Previous"
                 >
-                  Prev
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
-                  className="px-3 py-1 rounded-md border border-neutral-300 text-sm disabled:opacity-50"
+                  className="px-3 py-1 rounded-md border border-neutral-300 text-sm disabled:opacity-50 hover:shadow"
                   disabled={end >= totalFiltered}
                   onClick={() => setPage((p) => p + 1)}
+                  title="Next"
                 >
-                  Next
+                  <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -269,6 +334,14 @@ export default function MainContent() {
           </div>
         ) : (
           <>
+          {loading && (
+            <div className="px-6 py-8">
+              <div className="flex items-center space-x-3">
+                <div className="h-5 w-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                <span className="text-sm text-neutral-600">Loading employees...</span>
+              </div>
+            </div>
+          )}
           {employees.length > 0 && (
           <div className="flex items-center justify-between px-0 pb-3 min-w-0">
             <div className="relative">
@@ -298,6 +371,9 @@ export default function MainContent() {
                 <Grid3X3 className="h-4 w-4" />
                 <span>Tile</span>
               </button>
+              <Link to="/employees/new" className="ml-3 px-3 py-1.5 rounded-md text-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow">
+                Add Employee
+              </Link>
             </div>
           </div>
           )}
@@ -326,7 +402,7 @@ export default function MainContent() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-neutral-900">{employee.name}</h3>
-                      <p className="text-sm text-neutral-600">{employee.role}</p>
+                      <p className="text-sm text-neutral-600">{employee.status}</p>
                     </div>
                   </div>
                   <div className="relative">
@@ -369,15 +445,16 @@ export default function MainContent() {
                   </div>
                   <div className="flex items-center text-sm text-neutral-600">
                     <Calendar className="h-4 w-4 mr-2 text-neutral-400" />
-                    <span>Joined {new Date(employee.hireDate).getFullYear()}</span>
+                    <span>Joined {formatDate(employee.hireDate)}</span>
                   </div>
                 </div>
                 
                 <div className="mt-4 pt-4 border-t border-gray-100">
                   <div className="flex items-center justify-between">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full bg-primary-100 text-primary-700`}>
+                    <span />
+                    {/* <span className={`px-2 py-1 text-xs font-medium rounded-full bg-primary-100 text-primary-700`}>
                       {employee.role}
-                    </span>
+                    </span> */}
                     <button className="text-sm text-primary-600 hover:text-primary-700 font-medium">
                       View Details
                     </button>
